@@ -132,10 +132,13 @@ const ImageDeleteHandler = ({item}) => {
 async function ChooseImageHandler() {
 
   try{
-   const images = await launchImageLibraryAsync()
-    setInputs((prevData) => { return {...prevData , photo: { value: [...prevData.photo.value , { uri: images.uri , id: uuid.v4() } ] , valid: true }} })
+   const images = await launchImageLibraryAsync({allowsMultipleSelection: true})
+   const selectedImages = images.selected.map((item) => {return { uri: item.uri , id: uuid.v4() }})
+
+    setInputs((prevData) => { return {...prevData , photo: { value: [...prevData.photo.value , ...selectedImages ] , valid: true }} })
   }
   catch(error) {
+    console.log(error)
     Alert.alert('Error' , 'Something went wrong')
   }
 
@@ -215,7 +218,7 @@ async function ChooseImageHandler() {
 
         <Button title="choose photo"  onPress={ChooseImageHandler}/>
 
-        
+
         { Inputs.photo.value.length > 0 && <ImageList imageData={Inputs.photo.value} DeleteHandler={ImageDeleteHandler} /> }
 
 
