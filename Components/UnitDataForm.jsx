@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View, Text, Alert } from "react-native";
+import { ScrollView, StyleSheet, View, Alert } from "react-native";
 import { useState } from "react";
 
 import { useFormik } from "formik";
@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 
 import InputField from "./UI/InputField";
 import Counter from "./UI/Counter";
+import DoubleChoice  from './UI/DoubleChoice';
 
 const UnitDataForm = ({ defaultValues }) => {
   const [Inputs, setInputs] = useState({
@@ -77,6 +78,42 @@ const UnitDataForm = ({ defaultValues }) => {
    
   }
 
+  const FurnishedDataHandler = (identifier) => {
+    if(identifier === 'Yes') {
+      setInputs((prevData) => {return {...prevData , Furnished: { value: "Yes", valid: true }}})
+    }else{
+      setInputs((prevData) => {return {...prevData , Furnished: { value: "No", valid: true }}})
+    }
+  }
+
+  const KitchenDataHandler = (identifier) => {
+    if(identifier === 'Open') {
+      setInputs((prevData) => {return {...prevData , kitchen: { value: "Open", valid: true }}})
+    }else{
+      setInputs((prevData) => {return {...prevData , kitchen: { value: "Closed", valid: true }}})
+    }
+  }
+
+
+  const ParkingDataHandler = (identifier) => {
+    if(identifier === 'Split') {
+      setInputs((prevData) => {return {...prevData , Parking : { value: "Split", valid: true }}})
+    }else{
+      setInputs((prevData) => {return {...prevData , Parking : { value: "Central", valid: true }}})
+    }
+  }
+
+
+  const FurnishedData = [{name: 'Yes' , Action: FurnishedDataHandler.bind(null, 'Yes') } ,
+  {name: 'No' , Action: FurnishedDataHandler.bind(null, 'No') }]
+
+  const KitchenData = [{name: 'Closed' , Action: KitchenDataHandler.bind(null, 'Closed') } ,
+  {name: 'Open' , Action: KitchenDataHandler.bind(null, 'Open') }]
+
+
+  const ParkingData = [{name: 'Split' , Action: ParkingDataHandler.bind(null, 'Split') } ,
+  {name: 'Central' , Action: ParkingDataHandler.bind(null, 'Central') }]
+
   return (
     <View style={Styles.rootContainer}>
       <InputField
@@ -100,6 +137,14 @@ const UnitDataForm = ({ defaultValues }) => {
         <Counter label='Guest Rooms' value={ Inputs.guestRooms.value } onChange={ ChangeHandler.bind(this, 'guestRooms')} />
         <Counter label='Longues'  value={ Inputs.Longues.value } onChange={ ChangeHandler.bind(this, 'Longues')}/>
       </View>
+
+        <View style={Styles.counterFlex}>
+        <DoubleChoice label='Furnished' data={FurnishedData} defaultValue='left' />
+        <DoubleChoice label='Kitchen' data={KitchenData} defaultValue='Right' />
+        </View>
+
+        <DoubleChoice label='Parking' data={FurnishedData} defaultValue='left' />
+
 
     <InputField
         invalid={!Inputs.ElecNo.valid}
