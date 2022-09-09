@@ -7,7 +7,7 @@ import SmallButton from "./SmallButton";
 import { colors } from "../../Utils/Styles";
 
 const Counter = ({ label, onChange , value }) => {
-  const { width, height } = useWindowDimensions();
+//   const { width, height } = useWindowDimensions();
 
   const styles = StyleSheet.create({
     rootContainer: {
@@ -15,7 +15,7 @@ const Counter = ({ label, onChange , value }) => {
       flexDirection: "column",
       justifyContent: "space-around",
       alignItems: "flex-start",
-      marginHorizontal: 25,
+      marginHorizontal: 15,
       // width: width > 400 ? '100%' : '50%' ,
       minHeight: 100,
     },
@@ -30,12 +30,12 @@ const Counter = ({ label, onChange , value }) => {
     },
     input: {
       backgroundColor: "#fcfcfc",
-      padding: 15,
+      padding: 10,
       fontSize: 18,
-      width: 70,
+      width: 80,
       borderColor: colors.palette_Sencod_grey,
       borderWidth: 1,
-      height: 50,
+      height: 40,
       textAlign: "center",
     },
     label: {

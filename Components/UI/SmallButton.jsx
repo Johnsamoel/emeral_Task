@@ -25,18 +25,20 @@ const styles = StyleSheet.create({
         backgroundColor: colors.palette_main_grey,
         justifyContent: 'center',
         alignItems: 'center',
+      
     },
     pressed: {
         opacity: 0.7
     },
     text: {
-        width: 30,
-        height: 50,
+        width: 40,
+        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'red',
         borderRadius: 2,
         backgroundColor: '#E8E8E8',
+       
     }
 })
 
