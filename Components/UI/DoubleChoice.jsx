@@ -36,7 +36,7 @@ const DoubleChoice = ({label , data , defaultValue }) => {
                 </View>
                 </Pressable>)
             }else{
-                return(<Pressable key={item.name} style={ ({pressed}) => pressed || chosen === 'Right'? styles.RightchosenOption : styles.Rightoption  }                 onPress={() =>{
+                return(<Pressable key={item.name} style={ ({pressed}) => pressed || chosen === 'Right'? styles.RightchosenOption : styles.Rightoption  }  onPress={() =>{
                     onpressRightSide()
                     item.Action()}} >
                 <View>

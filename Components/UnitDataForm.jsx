@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useFormik } from "formik";
 
 //custom usable Input field
-
 import InputField from "./UI/InputField";
 import Counter from "./UI/Counter";
 import DoubleChoice  from './UI/DoubleChoice';
+import FourChoices from "./UI/FourChoices";
 
 const UnitDataForm = ({ defaultValues }) => {
   const [Inputs, setInputs] = useState({
@@ -104,6 +104,15 @@ const UnitDataForm = ({ defaultValues }) => {
   }
 
 
+  const AcDataHandler = (identifier) => {
+    console.log(identifier)
+    if(identifier){
+      setInputs((prevData) => { return {...prevData , selectAc: { value: identifier , valid: true }  }  })
+    }
+  }
+
+
+
   const FurnishedData = [{name: 'Yes' , Action: FurnishedDataHandler.bind(null, 'Yes') } ,
   {name: 'No' , Action: FurnishedDataHandler.bind(null, 'No') }]
 
@@ -113,6 +122,7 @@ const UnitDataForm = ({ defaultValues }) => {
 
   const ParkingData = [{name: 'Split' , Action: ParkingDataHandler.bind(null, 'Split') } ,
   {name: 'Central' , Action: ParkingDataHandler.bind(null, 'Central') }]
+
 
   return (
     <View style={Styles.rootContainer}>
@@ -169,6 +179,8 @@ const UnitDataForm = ({ defaultValues }) => {
         value: Inputs.WaterNo.value ,
         }}
         />
+
+        <FourChoices data={AcDataHandler} />
     </View>
   );
 };
@@ -182,7 +194,6 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    // alignItems: 'center',
     width: '100%',
 
   }
