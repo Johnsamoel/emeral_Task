@@ -8,6 +8,8 @@ import { Ionicons } from '@expo/vector-icons'
 const SmallButton = ({onpress , iconName}) => {
 
 
+
+
     return (
         <Pressable style={( {pressed}) => pressed ? styles.pressed :  styles.rootContainer } onPress={onpress} >
             <View style={styles.text}>
