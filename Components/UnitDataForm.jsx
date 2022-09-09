@@ -1,13 +1,19 @@
-import { ScrollView, StyleSheet, View, Alert } from "react-native";
+import { ScrollView, StyleSheet, View, Alert, Button } from "react-native";
 import { useState } from "react";
 
 import { useFormik } from "formik";
+import uuid from 'react-native-uuid';
+
+import { launchImageLibraryAsync } from 'expo-image-picker';
+
 
 //custom usable Input field
 import InputField from "./UI/InputField";
 import Counter from "./UI/Counter";
 import DoubleChoice  from './UI/DoubleChoice';
 import FourChoices from "./UI/FourChoices";
+import ImageList from "./UI/ImageList";
+import ImagePicker from "./ImagePicker";
 
 const UnitDataForm = ({ defaultValues }) => {
   const [Inputs, setInputs] = useState({
@@ -22,7 +28,7 @@ const UnitDataForm = ({ defaultValues }) => {
     ElecNo: { value: "", valid: true },
     WaterNo: { value: "", valid: true },
     selectAc: { value: "", valid: true },
-    photo: { value: "", valid: true },
+    photo: { value: [], valid: true },
   });
 
   const formik = useFormik({
@@ -105,12 +111,36 @@ const UnitDataForm = ({ defaultValues }) => {
 
 
   const AcDataHandler = (identifier) => {
-    console.log(identifier)
+
     if(identifier){
       setInputs((prevData) => { return {...prevData , selectAc: { value: identifier , valid: true }  }  })
     }
   }
 
+  const ImageUpdateHandler = ({uri}) => {
+
+    setInputs((prevData) => { return {...prevData , photo: { value: [...prevData.photo.value , { uri: uri , id: uuid.v4() } ] , valid: true }} })
+  }
+
+
+const ImageDeleteHandler = ({item}) => {
+
+  if(item)  setInputs((prevData) => { return {...prevData , photo: { value: prevData.photo.value.filter((photo) => photo.id !== item.id) , valid: true }} })
+
+}
+
+async function ChooseImageHandler() {
+
+  try{
+   const images = await launchImageLibraryAsync()
+    setInputs((prevData) => { return {...prevData , photo: { value: [...prevData.photo.value , { uri: images.uri , id: uuid.v4() } ] , valid: true }} })
+  }
+  catch(error) {
+    Alert.alert('Error' , 'Something went wrong')
+  }
+
+
+}
 
 
   const FurnishedData = [{name: 'Yes' , Action: FurnishedDataHandler.bind(null, 'Yes') } ,
@@ -122,7 +152,6 @@ const UnitDataForm = ({ defaultValues }) => {
 
   const ParkingData = [{name: 'Split' , Action: ParkingDataHandler.bind(null, 'Split') } ,
   {name: 'Central' , Action: ParkingDataHandler.bind(null, 'Central') }]
-
 
   return (
     <View style={Styles.rootContainer}>
@@ -181,6 +210,16 @@ const UnitDataForm = ({ defaultValues }) => {
         />
 
         <FourChoices data={AcDataHandler} />
+
+        <ImagePicker dispatch={ImageUpdateHandler} />
+
+        <Button title="choose photo"  onPress={ChooseImageHandler}/>
+
+        
+        { Inputs.photo.value.length > 0 && <ImageList imageData={Inputs.photo.value} DeleteHandler={ImageDeleteHandler} /> }
+
+
+
     </View>
   );
 };
