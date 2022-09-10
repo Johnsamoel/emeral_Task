@@ -1,4 +1,5 @@
-import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Button, SafeAreaView, StyleSheet, Text, View , Pressable } from 'react-native';
+import { colors } from '../Utils/Styles';
 
 const Landing = ({navigation}) => {
 
@@ -12,10 +13,14 @@ const Landing = ({navigation}) => {
         <View style={style.rootContainer}>
 
             <View style={style.container}>
-                <Text>
-                    Let's start the app
+                <Text style={style.header}>
+                    Welcome
                 </Text>
-                <Button title='start' onPress={NavigationHandler}/>
+                <Pressable  style={ ({pressed}) => pressed ? [style.button , style.pressed] : style.button} onPress={NavigationHandler}>
+                <View>
+                    <Text style={style.text}>Next</Text>
+                </View>
+            </Pressable>
             </View>
         </View>
         </SafeAreaView>
@@ -32,7 +37,31 @@ const style = StyleSheet.create({
     },
     container: {
         justifyContent: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        height: 300,
+    },
+    button: {
+        width: 150,
+        height: 50,
+        backgroundColor: colors.palette_success_main,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    text:{
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: 'white'
+    }, 
+    pressed: {
+        opacity: 0.5
+    },
+    header : {
+        color: colors.palette_success_main,
+        fontWeight: 'bold',
+        fontSize: 32,
+        marginVertical: 35,
+        textAlign: 'center'
     }
 })
 export default Landing;

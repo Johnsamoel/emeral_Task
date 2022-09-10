@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: '800',
-        color: colors.palette_success_dark
+        color: 'black'
     },
     pressed: {
         opacity: 0.5

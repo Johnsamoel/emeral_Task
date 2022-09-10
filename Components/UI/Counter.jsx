@@ -7,7 +7,7 @@ import SmallButton from "./SmallButton";
 import { colors } from "../../Utils/Styles";
 
 const Counter = ({ label, onChange , value }) => {
-//   const { width, height } = useWindowDimensions();
+
 
   const styles = StyleSheet.create({
     rootContainer: {
