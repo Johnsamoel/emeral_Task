@@ -12,14 +12,12 @@ import { launchCameraAsync } from 'expo-image-picker';
 const ImagePicker = ({dispatch , selectFn}) => {
 
     async function TakeImageHandler() {
-    try{     const img =  await launchCameraAsync()
+    try{   const img =  await launchCameraAsync()
         dispatch(img)
     } catch (err) {
         Alert.alert('Error' , 'SomeThing went wrong!')
-    }
-
-        
- }
+        return
+ }}
 
 
     return (

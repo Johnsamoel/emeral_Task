@@ -1,4 +1,5 @@
-import { View , FlatList , StyleSheet , Image} from "react-native";
+import { View , FlatList , StyleSheet , Image , Text} from "react-native";
+import { colors } from "../../Utils/Styles";
 
 import ImagePreview from "../ImagePreview";
 
@@ -8,7 +9,9 @@ const ImageList = ({imageData , DeleteHandler}) => {
 
     return (
         <View style={styles.rootContainer}>
-            <FlatList data={imageData} keyExtractor={(item) => item.id } renderItem={RenderMethod}  horizontal={true}  />
+
+            { imageData.length > 0 ?   <FlatList data={imageData} keyExtractor={(item) => item.id } renderItem={RenderMethod}  horizontal={true}  />
+            : <Text style={{fontWeight: 'bold' , fontSize: 18 , color:colors.palette_main_grey}}>No photos Added Yet.</Text>}
         </View>
     );
 };
@@ -18,8 +21,10 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 200 ,
         width: 350,
-        alignItems:'center'
-        
+        alignItems:'center',
+        backgroundColor: colors.palette_Sencod_grey,
+        borderRadius: 12,
+        justifyContent: 'center'
     }
 })
 
