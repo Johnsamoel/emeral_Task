@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View, Alert, Button } from "react-native";
+import {  StyleSheet, View, Alert, Button } from "react-native";
 import { useState , useEffect ,useLayoutEffect} from "react";
 
 import { useFormik } from "formik";
@@ -7,6 +7,7 @@ import uuid from 'react-native-uuid';
 import { launchImageLibraryAsync } from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useNavigation } from "@react-navigation/native";
 
 //custom usable Input field
 import InputField from "./UI/InputField";
@@ -15,9 +16,13 @@ import DoubleChoice  from './UI/DoubleChoice';
 import FourChoices from "./UI/FourChoices";
 import ImageList from "./UI/ImageList";
 import ImagePicker from "./ImagePicker";
+import ButtonsBox from "./UI/ButtonsBox";
+
 
 
 const UnitDataForm = () => {
+
+  const navigation = useNavigation()
 
   useLayoutEffect(() => {
     async function GeTStoredData() {
@@ -89,8 +94,7 @@ const UnitDataForm = () => {
        
   }
 
-  const ChangeHandler = (identifier , operation) => {
-
+  const ChangeHandler = (identifier , operation , number) => {
 
     if(operation === '+'){
       setInputs((prevValue) => { return { ...prevValue , [identifier] : { value: +prevValue[identifier].value + 1 , valid: true  } } })
@@ -188,8 +192,8 @@ async function ChooseImageHandler() {
   const ParkingData = [{name: 'Split' , Action: ParkingDataHandler.bind(null, 'Split') } ,
  {name: 'Central' , Action: ParkingDataHandler.bind(null, 'Central') }]
 
-  const showData = () => {
-   console.log(Object.values(Inputs))
+  const showResult = () => {
+    Alert.alert('Sucess', 'Your data is saved Successfully')
   }
 
   return (
@@ -254,7 +258,7 @@ async function ChooseImageHandler() {
 
           <ImageList imageData={Inputs.photo.value} DeleteHandler={ImageDeleteHandler} /> 
 
-          <Button title="submit" onPress={showData} />
+          <ButtonsBox nextfn={showResult} onBackfn={() => {  navigation.goBack() }} />
     </View>
   );
 };

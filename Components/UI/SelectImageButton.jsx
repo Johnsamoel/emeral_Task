@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
         opacity: 0.5
     },
     text: {
-        color: colors.palette_success_dark,
         fontWeight: 'bold',
     }
 })

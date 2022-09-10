@@ -19,12 +19,13 @@ const ImageList = ({imageData , DeleteHandler}) => {
 const styles = StyleSheet.create({
     rootContainer: {
         flex: 1,
-        height: 200 ,
-        width: 350,
+        height: 220 ,
+        width: 335,
         alignItems:'center',
         backgroundColor: colors.palette_Sencod_grey,
         borderRadius: 12,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginHorizontal: 10
     }
 })
 
