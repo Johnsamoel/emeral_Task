@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, View, Alert, Button } from "react-native";
-import { useState , useEffect} from "react";
+import { useState , useEffect ,useLayoutEffect} from "react";
 
 import { useFormik } from "formik";
 import uuid from 'react-native-uuid';
@@ -19,13 +19,14 @@ import ImagePicker from "./ImagePicker";
 
 const UnitDataForm = () => {
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function GeTStoredData() {
       const data = await AsyncStorage.getItem('userdata');
-      if(data) setInputs(JSON.parse(data))}
-
+      if(data) setInputs(JSON.parse(data)) }
     GeTStoredData()
+  
   } , [])
+
 
   const [Inputs, setInputs] = useState({
     unitSize: { value: "", valid: true },
@@ -33,14 +34,15 @@ const UnitDataForm = () => {
     bathRooms: { value: 0, valid: true },
     guestRooms: { value: 0, valid: true },
     Longues: { value: 0, valid: true },
-    Furnished: { value: "NO", valid: true },
+    Furnished: { value: 'No', valid: true },
     kitchen: { value: "Open", valid: true },
     Parking: { value: "Central", valid: true },
     ElecNo: { value: "", valid: true },
     WaterNo: { value: "", valid: true },
-    selectAc: { value: "", valid: true },
+    selectAc: { value: "Split", valid: true },
     photo: { value: [], valid: true },
   });
+
 
   useEffect(() => {
     async function saveData ()  {
@@ -75,7 +77,7 @@ const UnitDataForm = () => {
     };
 
     
-        if( !isFinite(enteredValue) || enteredValue === '' )  {
+        if( !isFinite(enteredValue) || enteredValue === '' || enteredValue <= 0   )  {
             Errors.unitSize = 'Invalid Value'
             setInputs((prevData) => { return { ...prevData , [inputIdentifier] :  { value: enteredValue  , valid: false} } })
         }else{
@@ -105,13 +107,9 @@ const UnitDataForm = () => {
   }
 
   const FurnishedDataHandler = (identifier) => {
-    if(identifier === 'Yes') {
-      setInputs((prevData) => {return {...prevData , Furnished: { value: "Yes", valid: true }}})
-    }else{
-      setInputs((prevData) => {return {...prevData , Furnished: { value: "No", valid: true }}})
-    }
+    if(identifier) setInputs((prevData) => {return {...prevData , Furnished: { value: identifier, valid: true }}})
 
-  }
+}
 
   const KitchenDataHandler = (identifier) => {
     if(identifier === 'Open') {
@@ -130,6 +128,7 @@ const UnitDataForm = () => {
     }
 
   }
+
 
 
   const AcDataHandler = (identifier) => {
@@ -187,7 +186,7 @@ async function ChooseImageHandler() {
 
 
   const ParkingData = [{name: 'Split' , Action: ParkingDataHandler.bind(null, 'Split') } ,
-  {name: 'Central' , Action: ParkingDataHandler.bind(null, 'Central') }]
+ {name: 'Central' , Action: ParkingDataHandler.bind(null, 'Central') }]
 
   const showData = () => {
    console.log(Object.values(Inputs))
@@ -218,12 +217,12 @@ async function ChooseImageHandler() {
       </View>
 
         <View style={Styles.counterFlex}>
-        <DoubleChoice label='Furnished' data={FurnishedData} defaultValue={Inputs.Furnished.value === 'Yes' ? 'Right' : 'left'} />
-        <DoubleChoice label='Kitchen' data={KitchenData} defaultValue={Inputs.kitchen.value === 'Open' ? 'Right' : 'left'} />
+        <DoubleChoice label='Furnished' data={FurnishedData} defaultValue={Inputs.Furnished.value === 'No'? 'Right' : 'left'}  />
+        <DoubleChoice label='Kitchen' data={KitchenData} defaultValue={Inputs.kitchen.value === 'Open' ? 'Right' : 'left'}  />
         </View>
 
 
-        <DoubleChoice label='Parking' data={ParkingData} options={['Split' , 'Central']} defaultValue={Inputs.Parking.value === 'Central'? 'Right' : 'left' } />
+        <DoubleChoice label='Parking' data={ParkingData} options={['Split' , 'Central']} defaultValue={Inputs.Parking.value === 'Central'? 'Right' : 'left' }  />
 
     <InputField
         invalid={!Inputs.ElecNo.valid}
