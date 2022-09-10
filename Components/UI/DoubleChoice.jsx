@@ -5,9 +5,10 @@ import { useState } from 'react';
 import { colors } from '../../Utils/Styles';
 
 
-const DoubleChoice = ({label , data , defaultValue }) => {
+const DoubleChoice = ({label , data , defaultValue , options }) => {
 
-    const [chosen , setChosen] = useState(defaultValue)
+
+    const [chosen , setChosen] = useState(defaultValue.toString())
 
 
 
@@ -27,20 +28,20 @@ const DoubleChoice = ({label , data , defaultValue }) => {
         {data?.map((item , index) => {
       
             if(index % 2 === 0) {
-                return( <Pressable key={item.name} style={ ({pressed}) => pressed || chosen === 'left'? styles.leftchosenOption : styles.leftoption }
+                return( <Pressable key={item.name} style={ ({pressed}) => pressed || chosen === 'left' ? styles.leftchosenOption : styles.leftoption }
                 onPress={() =>{
-                    onpressLefttSide()
-                    item.Action()}} >
+                onpressLefttSide()
+                item.Action()}} >
                 <View>
-                <Text style={[styles.text , chosen === 'left' && {color: 'white'}]}>{item.name}</Text>
+                <Text style={[styles.text , chosen === 'left' && {color: 'white'}]}>{ options? options[0] : item.name}</Text>
                 </View>
                 </Pressable>)
             }else{
                 return(<Pressable key={item.name} style={ ({pressed}) => pressed || chosen === 'Right'? styles.RightchosenOption : styles.Rightoption  }  onPress={() =>{
-                    onpressRightSide()
-                    item.Action()}} >
+            onpressRightSide()
+            item.Action()}} >
                 <View>
-                <Text style={[styles.text , chosen === 'Right' && {color: 'white'}]}>{item.name}</Text>
+                <Text style={[styles.text , chosen === 'Right' && {color: 'white'}]}>{ options? options[1] : item.name}</Text>
                 </View>
                 </Pressable>)
             }

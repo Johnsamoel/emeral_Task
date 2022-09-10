@@ -3,39 +3,37 @@ import { View , Text , StyleSheet , Pressable} from "react-native";
 
 import { colors } from "../../Utils/Styles";
 
-const FourChoices = ({data}) => {
+const FourChoices = ({data , defValue}) => {
 
-    const [Chosen , setChosen] = useState('Split')
 
     const onpressHandler = (identifier) => {
         data(identifier[0])
-        setChosen(identifier[0])
     }
 
     return (
         <View style={styles.rootComponent}>
             <Text style={styles.label}>Select AC Type</Text>
             <View style={styles.rowContainer}>
-            <Pressable style={({pressed}) => pressed || Chosen === 'Split' ? [styles.LeftContainer , styles.choseContainer ] : styles.LeftContainer  } onPress={() => onpressHandler.call(null , ['Split'])} >
+            <Pressable style={({pressed}) => pressed || defValue === 'Split' ? [styles.LeftContainer , styles.choseContainer ] : styles.LeftContainer  } onPress={() => onpressHandler.call(null , ['Split'])} >
             <View >
                 <Text>Split</Text>
             </View>
             </Pressable>
 
-            <Pressable style={({pressed}) => pressed || Chosen === 'Central'? [styles.midContainers , styles.choseContainer ] : styles.midContainers  } onPress={() => onpressHandler.call(null , ['Central'])} >
+            <Pressable style={({pressed}) => pressed || defValue === 'Central'? [styles.midContainers , styles.choseContainer ] : styles.midContainers  } onPress={() => onpressHandler.call(null , ['Central'])} >
             <View >
                 <Text>Central</Text>
             </View>
             </Pressable>
 
-            <Pressable style={({pressed}) => pressed || Chosen === 'Window'? [styles.midContainers , styles.choseContainer  ] : styles.midContainers  } onPress={() => onpressHandler.call(null , ['Window'])}>
+            <Pressable style={({pressed}) => pressed || defValue === 'Window'? [styles.midContainers , styles.choseContainer  ] : styles.midContainers  } onPress={() => onpressHandler.call(null , ['Window'])}>
             <View>
                 <Text>Window</Text>
             </View>
             </Pressable>
 
 
-            <Pressable style={({pressed}) => pressed || Chosen === 'Not Installed' ? [styles.rightContainer , styles.choseContainer ] : styles.rightContainer  } onPress={() => onpressHandler.call(null , ['Not Installed'])}>
+            <Pressable style={({pressed}) => pressed || defValue === 'Not Installed' ? [styles.rightContainer , styles.choseContainer ] : styles.rightContainer  } onPress={() => onpressHandler.call(null , ['Not Installed'])}>
             <View >
                 <Text style={{textAlign: 'center'}}>Not Installed</Text>
             </View>

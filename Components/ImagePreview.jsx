@@ -1,6 +1,7 @@
 import { View  , Image , StyleSheet, Pressable } from "react-native";
 
 import uuid from 'react-native-uuid';
+import { colors } from "../Utils/Styles";
 
 const ImagePreview = ({item , onpressFn}) => {
 
@@ -22,11 +23,11 @@ const ImagePreview = ({item , onpressFn}) => {
 const styles = StyleSheet.create({
     rootContainer :{
         flex: 1,
-        width: 200,
+        width: 120,
         height: 150,
         borderRadius: 10,
         marginVertical: 15,
-        padding: 10
+        padding: 10,
     }
 })
 

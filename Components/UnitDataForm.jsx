@@ -1,10 +1,11 @@
 import { ScrollView, StyleSheet, View, Alert, Button } from "react-native";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 
 import { useFormik } from "formik";
 import uuid from 'react-native-uuid';
 
 import { launchImageLibraryAsync } from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 //custom usable Input field
@@ -16,7 +17,16 @@ import ImageList from "./UI/ImageList";
 import ImagePicker from "./ImagePicker";
 
 
-const UnitDataForm = ({ defaultValues }) => {
+const UnitDataForm = () => {
+
+  useEffect(() => {
+    async function GeTStoredData() {
+      const data = await AsyncStorage.getItem('userdata');
+      if(data) setInputs(JSON.parse(data))}
+
+    GeTStoredData()
+  } , [])
+
   const [Inputs, setInputs] = useState({
     unitSize: { value: "", valid: true },
     bedRooms: { value: 0, valid: true },
@@ -31,6 +41,15 @@ const UnitDataForm = ({ defaultValues }) => {
     selectAc: { value: "", valid: true },
     photo: { value: [], valid: true },
   });
+
+  useEffect(() => {
+    async function saveData ()  {
+     await AsyncStorage.setItem('userdata' , JSON.stringify(Inputs))
+    }
+
+    saveData()
+
+  } , [Inputs])
 
   const formik = useFormik({
     initialValues: Inputs,
@@ -91,6 +110,7 @@ const UnitDataForm = ({ defaultValues }) => {
     }else{
       setInputs((prevData) => {return {...prevData , Furnished: { value: "No", valid: true }}})
     }
+
   }
 
   const KitchenDataHandler = (identifier) => {
@@ -108,6 +128,7 @@ const UnitDataForm = ({ defaultValues }) => {
     }else{
       setInputs((prevData) => {return {...prevData , Parking : { value: "Central", valid: true }}})
     }
+
   }
 
 
@@ -120,15 +141,21 @@ const UnitDataForm = ({ defaultValues }) => {
 
   const ImageUpdateHandler = ({uri}) => {
 
-    setInputs((prevData) => { return {...prevData , photo: { value: [...prevData.photo.value , { uri: uri , id: uuid.v4() } ] , valid: true }} })
-  }
+    if(uri){
+      setInputs((prevData) => { return {...prevData , photo: { value: [...prevData.photo.value , { uri: uri , id: uuid.v4() } ] , valid: true }} })
+      AsyncStorage.setItem('userdata' , JSON.stringify(Inputs))
+    }
+
+
+    }
 
 
 const ImageDeleteHandler = ({item}) => {
 
-  if(item)  setInputs((prevData) => { return {...prevData , photo: { value: prevData.photo.value.filter((photo) => photo.id !== item.id) , valid: true }} })
-
-}
+  if(item) { 
+    setInputs((prevData) => { return {...prevData , photo: { value: prevData.photo.value.filter((photo) => photo.id !== item.id) , valid: true }} }) 
+   AsyncStorage.setItem('userdata' , JSON.stringify(Inputs))
+}}
 
 async function ChooseImageHandler() {
 
@@ -145,7 +172,6 @@ async function ChooseImageHandler() {
 
   }
   catch(error) {
-    console.log(error)
     Alert.alert('Error' , 'Something went wrong')
   }
 
@@ -162,6 +188,10 @@ async function ChooseImageHandler() {
 
   const ParkingData = [{name: 'Split' , Action: ParkingDataHandler.bind(null, 'Split') } ,
   {name: 'Central' , Action: ParkingDataHandler.bind(null, 'Central') }]
+
+  const showData = () => {
+   console.log(Object.values(Inputs))
+  }
 
   return (
     <View style={Styles.rootContainer}>
@@ -188,12 +218,12 @@ async function ChooseImageHandler() {
       </View>
 
         <View style={Styles.counterFlex}>
-        <DoubleChoice label='Furnished' data={FurnishedData} defaultValue='left' />
-        <DoubleChoice label='Kitchen' data={KitchenData} defaultValue='Right' />
+        <DoubleChoice label='Furnished' data={FurnishedData} defaultValue={Inputs.Furnished.value === 'Yes' ? 'Right' : 'left'} />
+        <DoubleChoice label='Kitchen' data={KitchenData} defaultValue={Inputs.kitchen.value === 'Open' ? 'Right' : 'left'} />
         </View>
 
-        <DoubleChoice label='Parking' data={FurnishedData} defaultValue='left' />
 
+        <DoubleChoice label='Parking' data={ParkingData} options={['Split' , 'Central']} defaultValue={Inputs.Parking.value === 'Central'? 'Right' : 'left' } />
 
     <InputField
         invalid={!Inputs.ElecNo.valid}
@@ -219,15 +249,13 @@ async function ChooseImageHandler() {
         }}
         />
 
-        <FourChoices data={AcDataHandler} />
+        <FourChoices data={AcDataHandler} defValue={Inputs.selectAc.value} />
 
         <ImagePicker dispatch={ImageUpdateHandler} selectFn={ChooseImageHandler} />
 
-        {/* <SelectImageButton onPressFn={ChooseImageHandler} /> */}
+          <ImageList imageData={Inputs.photo.value} DeleteHandler={ImageDeleteHandler} /> 
 
-        { Inputs.photo.value.length > 0 && <ImageList imageData={Inputs.photo.value} DeleteHandler={ImageDeleteHandler} /> }
-
-
+          <Button title="submit" onPress={showData} />
     </View>
   );
 };
