@@ -6,7 +6,7 @@ const UploadButon = ({onPress}) => {
     return (
         <Pressable style={({pressed}) => pressed? [styles.rootContainer, styles.pressed] : styles.rootContainer} onPress={onPress}>
             <View>
-            <Text style={styles.text}>Choose Image</Text>
+            <Text style={styles.text}>Capture Image</Text>
             </View>
         </Pressable>
     );

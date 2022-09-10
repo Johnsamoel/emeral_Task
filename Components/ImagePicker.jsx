@@ -2,11 +2,14 @@ import { View , StyleSheet , Text, Alert } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
 import { colors } from "../Utils/Styles";
+
+//custom components
 import UploadButon from "./UI/UploadButon";
+import SelectImageButton from "./UI/SelectImageButton";
 
 import { launchCameraAsync } from 'expo-image-picker';
 
-const ImagePicker = ({dispatch}) => {
+const ImagePicker = ({dispatch , selectFn}) => {
 
     async function TakeImageHandler() {
     try{     const img =  await launchCameraAsync()
@@ -25,7 +28,10 @@ const ImagePicker = ({dispatch}) => {
         <View style={styles.rootContainer}>
         <Ionicons name="images" size={55} color={colors.palette_main_grey} />
         <Text style={styles.text}>Select A photo From your gallery</Text>
+        <View style={styles.buttonsContainer}>
         <UploadButon onPress={TakeImageHandler} />
+        <SelectImageButton onPressFn={selectFn} />
+        </View>
         </View>
         </>
     );
@@ -53,6 +59,13 @@ const styles = StyleSheet.create({
             fontSize: 16,
             color: colors.palette_main_grey,
             marginBottom: 20,
+    },
+    buttonsContainer: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginHorizontal: 10
     }
 })
 

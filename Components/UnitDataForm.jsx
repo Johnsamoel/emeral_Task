@@ -15,6 +15,7 @@ import FourChoices from "./UI/FourChoices";
 import ImageList from "./UI/ImageList";
 import ImagePicker from "./ImagePicker";
 
+
 const UnitDataForm = ({ defaultValues }) => {
   const [Inputs, setInputs] = useState({
     unitSize: { value: "", valid: true },
@@ -132,10 +133,19 @@ const ImageDeleteHandler = ({item}) => {
 async function ChooseImageHandler() {
 
   try{
-   const images = await launchImageLibraryAsync()
+   const images = await launchImageLibraryAsync({allowsMultipleSelection: true})
+
+   if(images.selected) {
+    const selectedImages =  images.selected.map((item) => {return { uri: item.uri , id: uuid.v4() }})
+    setInputs((prevData) => { return {...prevData , photo: { value: [...prevData.photo.value , ...selectedImages ] , valid: true }} })
+   
+   }else {
     setInputs((prevData) => { return {...prevData , photo: { value: [...prevData.photo.value , { uri: images.uri , id: uuid.v4() } ] , valid: true }} })
+   }
+
   }
   catch(error) {
+    console.log(error)
     Alert.alert('Error' , 'Something went wrong')
   }
 
@@ -211,13 +221,11 @@ async function ChooseImageHandler() {
 
         <FourChoices data={AcDataHandler} />
 
-        <ImagePicker dispatch={ImageUpdateHandler} />
+        <ImagePicker dispatch={ImageUpdateHandler} selectFn={ChooseImageHandler} />
 
-        <Button title="choose photo"  onPress={ChooseImageHandler}/>
+        {/* <SelectImageButton onPressFn={ChooseImageHandler} /> */}
 
-        
         { Inputs.photo.value.length > 0 && <ImageList imageData={Inputs.photo.value} DeleteHandler={ImageDeleteHandler} /> }
-
 
 
     </View>
